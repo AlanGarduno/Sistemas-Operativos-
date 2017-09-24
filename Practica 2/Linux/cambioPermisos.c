@@ -4,6 +4,7 @@
 #include<sys/stat.h>
 #include<errno.h>
 #include<string.h>
+
 #ifdef __linux__
 #define SO "Linux"
 #elif _WIN32
@@ -12,7 +13,6 @@
 
 int main(){
     int op,res;
-    int rval,rval2;
     char path[] = "/home/alan/Escritorio/Semestre";
     char*filePath = (char*)malloc(sizeof(char)*50);
     printf("Cambio de perimisos a archivos \nSeleccione el archivo para cmabiar sus perimisos\n");
@@ -25,21 +25,49 @@ int main(){
                 strcat(filePath,"/doc0.txt");
                 printf("Path de archivo 0 %s \n",filePath);
                 printf("Cambiando los permisos de doc0\n");
-               // rval = chmod("",);
-               printf("Seleccione los perimisos que desee asignar\n");
-               
+                chmod(filePath, S_IWOTH);
             break;
             case 2:
+                strcat(filePath,path);
+                strcat(filePath,"/doc1.txt");
+                printf("Path de archivo 0 %s \n",filePath);
+                printf("Cambiando los permisos de doc0\n");
+                chmod(filePath, S_IWOTH);
             break;
             case 3:
+                strcat(filePath,path);
+                strcat(filePath,"/doc2.txt");
+                printf("Path de archivo 0 %s \n",filePath);
+                printf("Cambiando los permisos de doc0\n");
+                chmod(filePath, S_IWOTH);
             break;
             case 4:
+                strcat(filePath,path);
+                strcat(filePath,"/doc3.txt");
+                printf("Path de archivo 0 %s \n",filePath);
+                printf("Cambiando los permisos de doc0\n");
+                chmod(filePath, S_IWOTH);
             break;
             case 5:
+                strcat(filePath,path);
+                strcat(filePath,"/doc4.txt");
+                printf("Path de archivo 0 %s \n",filePath);
+                printf("Cambiando los permisos de doc0\n");
+                chmod(filePath, S_IWOTH);
             break;
             case 6:
+                strcat(filePath,path);
+                strcat(filePath,"/doc5.txt");
+                printf("Path de archivo 0 %s \n",filePath);
+                printf("Cambiando los permisos de doc0\n");
+                chmod(filePath, S_IWOTH);
             break;
             case 7:
+                strcat(filePath,path);
+                strcat(filePath,"/doc6.txt");
+                printf("Path de archivo 0 %s \n",filePath);
+                printf("Cambiando los permisos de doc0\n");
+                chmod(filePath, S_IWOTH);
             break;
             default:
                 printf("Opcion no valida");
