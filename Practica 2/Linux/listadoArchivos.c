@@ -4,6 +4,7 @@
 #include<sys/types.h>
 #include<dirent.h>
 #include<time.h>
+#include<stat.h>
 
 int main(){
     struct stat *sb, buf;
