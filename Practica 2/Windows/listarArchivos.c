@@ -23,8 +23,7 @@
         }
 
         while ((pDirent = readdir(pDir)) != NULL) {
-            stat(pDirent->d_name,buf);
-            printf ("Nombre: %s  Tama%co: %ld Fecha: %s \n", pDirent->d_name,164,(*buf).st_size,(*buf).st_atime);
+            printf ("Nombre: %s  Tama%co: %ld bytes Fecha:%s  \n", pDirent->d_name,164,(*buf).st_size,ctime((*buf).st_atime));
         }
         closedir (pDir);
         return 0;

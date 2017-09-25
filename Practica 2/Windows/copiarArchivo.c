@@ -27,6 +27,8 @@ int main(){
     char *mostrarArchivo = (char*)malloc(sizeof(char));
     char *nombre = (char*)malloc(sizeof(char));
     char *nombreCopia = (char*)malloc(sizeof(char));
+    char *aux = (char*)malloc(sizeof(char));
+    char *aux2 = (char*)malloc(sizeof(char));
     int op, ar,i;
     HANDLE file;
     DWORD  dwBytesRead = 0;
@@ -82,9 +84,12 @@ int main(){
             for(i =0;i<ar;i++){
                 printf("\nIngrese el nombre del archivo a copiar:\n");
                 scanf("%s",nombre);
-
+                strcat(aux,origen);
+                strcat(aux,nombre); //src path
                 printf("Ingrese el nombre de la copia");
                 scanf("%s",nombreCopia);
+                strcat(aux2,destino);
+                strcat(aux2,nombreCopia); //dest path
             }
 
 
