@@ -5,6 +5,8 @@
 #include <tchar.h>
 #include<string.h>
 DWORD g_BytesTransferred = 0;
+void generarArchivos(char * ruta, char *  contenido);
+void crearDirectorioConArchivos(char * contenido);
 
 VOID CALLBACK FileIOCompletionRoutine(
       DWORD dwErrorCode,
@@ -22,13 +24,7 @@ VOID CALLBACK FileIOCompletionRoutine(
     g_BytesTransferred = dwNumberOfBytesTransfered;
    }
 int main(){
-    char origen [] = "C:/Users/JCVELMON/Desktop/Semestre/";
-    char destino [] = "C:/Users/JCVELMON/Desktop/Copia/";
     char *mostrarArchivo = (char*)malloc(sizeof(char));
-    char *nombre = (char*)malloc(sizeof(char));
-    char *nombreCopia = (char*)malloc(sizeof(char));
-    char *aux = (char*)malloc(sizeof(char));
-    char *aux2 = (char*)malloc(sizeof(char));
     int op, ar,i;
     HANDLE file;
     DWORD  dwBytesRead = 0;
@@ -38,7 +34,7 @@ int main(){
     scanf("%d",&op);
     switch(op){
         case 1:
-            printf("Mostrar Archivo\nIngresa el nombre del archivo a mostrar:");
+            printf("Mostrar Archivo\nIngresa el directorio del archivo a mostrar:");
             scanf("%s",mostrarArchivo);
             file = CreateFile(mostrarArchivo,// file to open
                 GENERIC_READ,               // open for reading
@@ -50,13 +46,13 @@ int main(){
 
                 if( FALSE == ReadFileEx(file, ReadBuffer, 50-1, &ol, FileIOCompletionRoutine) )
                 {
-                    printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", GetLastError());
+                    printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", 
+                    GetLastError());
                     CloseHandle(file);
                     return 0;
                 }
 
                 SleepEx(5000, TRUE);
-                //dwBytesRead = 49;
                 dwBytesRead = g_BytesTransferred;
 
                 if (dwBytesRead > 0 && dwBytesRead <= 50-1)
@@ -82,15 +78,51 @@ int main(){
             printf("Cuantos archvivos quieres copiar:\n");
             scanf("%d",&ar);
             for(i =0;i<ar;i++){
-                printf("\nIngrese el nombre del archivo a copiar:\n");
-                scanf("%s",nombre);
-                strcat(aux,origen);
-                strcat(aux,nombre); //src path
-                printf("Ingrese el nombre de la copia");
-                scanf("%s",nombreCopia);
-                strcat(aux2,destino);
-                strcat(aux2,nombreCopia); //dest path
+                printf("\nIngrese el directorio del archivo a copiar:\n");
+                scanf("%s",mostrarArchivo);
+                file = CreateFile(mostrarArchivo,// file to open
+                    GENERIC_READ,               // open for reading
+                    FILE_SHARE_READ,            // share for reading
+                    NULL,                       // default security
+                    OPEN_EXISTING,              // existing file only
+                    FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, // normal file
+                    NULL);                                          // no attr. template
+    
+                    if( FALSE == ReadFileEx(file, ReadBuffer, 50-1, &ol, FileIOCompletionRoutine) )
+                    {
+                        printf("Terminal failure: Unable to read from file.\n GetLastError=%08x\n", 
+                        GetLastError());
+                        CloseHandle(file);
+                        return 0;
+                    }
+    
+                    SleepEx(5000, TRUE);
+                    dwBytesRead = g_BytesTransferred;
+    
+                    if (dwBytesRead > 0 && dwBytesRead <= 50-1)
+                    {
+                        ReadBuffer[dwBytesRead]='\0'; // NULL character
+                
+                        _tprintf(TEXT("Data read from %s (%d bytes): \n"), mostrarArchivo, dwBytesRead);
+                        printf("%s\n", ReadBuffer);
+                    }
+                    else if (dwBytesRead == 0)
+                    {
+                        _tprintf(TEXT("No data read from file %s\n"), mostrarArchivo);
+                    }
+                    else
+                    {
+                        printf("\n ** Unexpected value for dwBytesRead ** \n");
+                    }
+            //Creacion de la copia
+            //printf("Ingrese el directorio de la copia:\n");
+            //scanf("%s",nombreCopia);
+            crearDirectorioConArchivos(ReadBuffer);
+            CloseHandle(file);
             }
+
+
+
 
 
         break;
@@ -100,4 +132,84 @@ int main(){
     }
 
     return 0;
+}
+void crearDirectorioConArchivos(char * contenido)
+{
+	int len;
+		int crearDir;
+		int dir;
+		char ruta[100];
+		printf("Ingrese la ruta donde seran creadas las copias de los archivos:\n");
+		scanf( "%s" , ruta );
+		len = strlen(ruta);
+		if( ruta[len-1] != '\"' )
+			strcat(ruta,"\\");
+		dir = SetCurrentDirectory( ruta );			//Regresa un 0 si falla, cualquier valor distinto de 0 en caso contrario
+		if( dir != 0 )			//Ya existe el directorio
+		{
+	    	generarArchivos( ruta, contenido);
+		}
+		else
+		{
+			crearDir = CreateDirectory(ruta,NULL);		//Crear el directorio con todos los permisos
+			if(crearDir==0)
+			{
+                printf("\nError\n");
+			}
+			else
+			{
+				printf("\nSe ha creado exitosamente el directorio %s :)\n",ruta);
+				system("pause");
+				generarArchivos( ruta, contenido);
+			}	
+		}
+}
+
+void generarArchivos(char * ruta, char *  contenido)
+{
+	//int a,i,n;
+	HANDLE hFile; 					//Archivo a manejar
+	DWORD dwBytesToWrite; 			//Numero de bytes a escribir
+    DWORD dwBytesWritten = 0; 		//Numero de bytes escritos
+	bool bErrorFlag = FALSE; 		//Bandera de error
+	//char cadena[100];
+	char archivo[20];				//Nombre del archivo
+	char direccion[150]={};
+	system("cls");
+	//printf("\nIngresa la cantidad de archivos a generar:\t");
+	//scanf("%d",&n);
+	fflush(stdin);
+	//for(i=0;i<n;i++)
+	//{
+	    strcat(direccion,ruta);
+		fflush(stdin);
+		printf("\n\nIngresa el nombre del archivo:\t");
+		scanf("%[^\n]",&archivo);
+		fflush(stdin);
+		strcat(direccion,archivo);
+		//printf("Ingresa la cadena a ingresar en el archivo:\t");
+		fflush(stdin);
+		//scanf("%[^\n]",&cadena);
+		dwBytesToWrite = (DWORD)strlen(contenido);
+		//printf("Se ha guardado el archivo '%s' en:\t '%s'\n",archivo,ruta);
+		hFile = CreateFile(direccion,           // Direcci�n del archivo
+                        GENERIC_WRITE,          // Apertura para escritura
+                        0,                      // No compartir
+                        NULL,                   // Seguridad por defecto
+                        CREATE_NEW,             // Solo crear un nuevo archivo
+                        FILE_ATTRIBUTE_NORMAL,  // Archivo normal
+                        NULL);                  // Sin plantillas de atributos
+		bErrorFlag = WriteFile( 
+                    hFile,           // Abrir archivo a manejar
+                    contenido,          // Informacion a escribir
+                    dwBytesToWrite,  // Numero de bytes a escribir
+                    &dwBytesWritten, // Numero de bytes que fueron escritos
+                    NULL);           // Ninguna estructura superpuesta
+		printf("Se escribieron %d bytes exitosamente.\n", dwBytesWritten);
+		CloseHandle(hFile);//Cierra el archivo
+		//memset(archivo,0,20);
+		//memset(cadena,0,100);
+		//memset(direccion,0,150);
+	//}
+	system("pause");	
 }
