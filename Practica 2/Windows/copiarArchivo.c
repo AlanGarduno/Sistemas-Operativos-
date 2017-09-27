@@ -167,31 +167,21 @@ void crearDirectorioConArchivos(char * contenido)
 
 void generarArchivos(char * ruta, char *  contenido)
 {
-	//int a,i,n;
 	HANDLE hFile; 					//Archivo a manejar
 	DWORD dwBytesToWrite; 			//Numero de bytes a escribir
     DWORD dwBytesWritten = 0; 		//Numero de bytes escritos
 	bool bErrorFlag = FALSE; 		//Bandera de error
-	//char cadena[100];
 	char archivo[20];				//Nombre del archivo
 	char direccion[150]={};
 	system("cls");
-	//printf("\nIngresa la cantidad de archivos a generar:\t");
-	//scanf("%d",&n);
 	fflush(stdin);
-	//for(i=0;i<n;i++)
-	//{
 	    strcat(direccion,ruta);
 		fflush(stdin);
 		printf("\n\nIngresa el nombre del archivo:\t");
 		scanf("%[^\n]",&archivo);
 		fflush(stdin);
 		strcat(direccion,archivo);
-		//printf("Ingresa la cadena a ingresar en el archivo:\t");
-		fflush(stdin);
-		//scanf("%[^\n]",&cadena);
 		dwBytesToWrite = (DWORD)strlen(contenido);
-		//printf("Se ha guardado el archivo '%s' en:\t '%s'\n",archivo,ruta);
 		hFile = CreateFile(direccion,           // Direcci�n del archivo
                         GENERIC_WRITE,          // Apertura para escritura
                         0,                      // No compartir
@@ -207,9 +197,5 @@ void generarArchivos(char * ruta, char *  contenido)
                     NULL);           // Ninguna estructura superpuesta
 		printf("Se escribieron %d bytes exitosamente.\n", dwBytesWritten);
 		CloseHandle(hFile);//Cierra el archivo
-		//memset(archivo,0,20);
-		//memset(cadena,0,100);
-		//memset(direccion,0,150);
-	//}
 	system("pause");	
 }
