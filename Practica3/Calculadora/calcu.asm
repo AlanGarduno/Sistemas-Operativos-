@@ -1,11 +1,11 @@
 segment .data
   menu db 'Selecciona la operacion a realizar:', 0x0A, '1. Multiplicacion', 0x0A, '2. Division', 0x0A, '3. Suma', 0x0A, '4. Resta', 0x0A ;
   longitudMenu       equ $-menu
-	msgOpcion          db "Digite la opcion: " ,0xA,0xD
+	msgOpcion          db "Opcion: " ,0xA,0xD
 	longitud1          equ $-msgOpcion
-	msgNumero1         db "Digita el numero 1: ",0xA
+	msgNumero1         db "Numero 1: ",0xA
 	longitud2          equ $-msgNumero1
-	msgNumero2         db "Digita el numero 2: ",0xA
+	msgNumero2         db "Numero 2: ",0xA
 	longitud3          equ $-msgNumero2
 	msgOpcionInvalida  db "Error de opcion",0xA
 	longitud4          equ $-msgOpcionInvalida
